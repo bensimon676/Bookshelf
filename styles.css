@@ -62,7 +62,7 @@ button:hover {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100px;
+    width: 100px;  /* Adjusted to ensure they fit side by side */
     height: 200px;
     margin: 10px;
     background-color: #b5835a;
@@ -79,10 +79,10 @@ button:hover {
 
 .book-title, .book-author {
     margin: 5px 0;
-    font-size: 14px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 12px;  /* Adjusted for better fit */
+    overflow-wrap: break-word;  /* Wrap long text */
+    word-wrap: break-word;      /* Break long words */
+    hyphens: auto;              /* Automatic hyphenation */
 }
 
 .book:hover {
