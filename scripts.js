@@ -1,81 +1,72 @@
+// Array to hold books
 let books = [];
 
-// Load books from localStorage on page load
-window.onload = function () {
+// Load books from local storage
+window.onload = function() {
     loadBooks();
-};
-
-// Load books from localStorage and render them
-function loadBooks() {
-    const savedBooks = localStorage.getItem('bookshelf');
-    if (savedBooks) {
-        books = JSON.parse(savedBooks);
-        renderBooks();
-    } else {
-        books = [];
-    }
 }
 
-// Add a new book to the bookshelf
+// Function to add a book
 function addBook() {
-    const title = document.getElementById('book-title').value;
-    const author = document.getElementById('book-author').value;
+    const title = document.getElementById("bookTitle").value;
+    const author = document.getElementById("bookAuthor").value;
 
     if (title && author) {
         books.push({ title, author });
-        document.getElementById('book-title').value = '';
-        document.getElementById('book-author').value = '';
         renderBooks();
+        document.getElementById("bookTitle").value = '';
+        document.getElementById("bookAuthor").value = '';
     }
 }
 
-// Save the current books to localStorage
-function saveBooks() {
-    localStorage.setItem('bookshelf', JSON.stringify(books));
-    alert('Bookshelf saved!');
-}
-
-// Render the list of books on the bookshelf
+// Function to render books on the shelf
 function renderBooks() {
-    const bookList = document.getElementById('book-list');
-    bookList.innerHTML = ''; // Clear current books
+    const bookshelf = document.getElementById("bookshelf");
+    bookshelf.innerHTML = ''; // Clear current books
 
     books.forEach((book, index) => {
-        const bookItem = document.createElement('li');
-        bookItem.className = 'book';
-        bookItem.draggable = true;
-        bookItem.ondragstart = (event) => drag(event, index);
-        bookItem.ondrop = (event) => drop(event, index);
-        bookItem.ondragover = (event) => allowDrop(event);
-        bookItem.innerHTML = `
-            <div class="book-title">${book.title}</div>
-            <div class="book-author">${book.author}</div>
-            <button onclick="deleteBook(${index})">X</button>
-        `;
-        bookList.appendChild(bookItem);
+        const bookElement = document.createElement("div");
+        bookElement.classList.add("book");
+
+        const titleElement = document.createElement("div");
+        titleElement.classList.add("book-title");
+        titleElement.textContent = book.title;
+
+        const authorElement = document.createElement("div");
+        authorElement.classList.add("book-author");
+        authorElement.textContent = book.author;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add("delete-button");
+        deleteButton.textContent = 'X';
+        deleteButton.onclick = function() {
+            deleteBook(index);
+        };
+
+        bookElement.appendChild(titleElement);
+        bookElement.appendChild(authorElement);
+        bookElement.appendChild(deleteButton);
+
+        bookshelf.appendChild(bookElement);
     });
 }
 
-// Delete a specific book
+// Function to delete a book
 function deleteBook(index) {
     books.splice(index, 1);
     renderBooks();
 }
 
-// Allow books to be reordered via drag and drop
-function allowDrop(event) {
-    event.preventDefault();
+// Save books to local storage
+function saveBooks() {
+    localStorage.setItem("books", JSON.stringify(books));
 }
 
-function drag(event, index) {
-    event.dataTransfer.setData('text', index);
-}
-
-function drop(event, index) {
-    event.preventDefault();
-    const draggedIndex = event.dataTransfer.getData('text');
-    const draggedBook = books[draggedIndex];
-    books.splice(draggedIndex, 1);
-    books.splice(index, 0, draggedBook);
-    renderBooks();
+// Load books from local storage
+function loadBooks() {
+    const storedBooks = JSON.parse(localStorage.getItem("books"));
+    if (storedBooks) {
+        books = storedBooks;
+        renderBooks();
+    }
 }
