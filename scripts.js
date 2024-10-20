@@ -1,10 +1,21 @@
 // Array to hold books
 let books = [];
 
+<<<<<<< HEAD
 // Load books from local storage
 window.onload = function() {
     loadBooks();
 }
+=======
+// Load books from localStorage on page load
+window.onload = function () {
+    const savedBooks = localStorage.getItem('bookshelf');
+    if (savedBooks) {
+        books = JSON.parse(savedBooks);
+        renderBooks();
+    }
+};
+>>>>>>> parent of c29a25d (ahh)
 
 // Function to add a book
 function addBook() {
