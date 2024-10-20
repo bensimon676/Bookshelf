@@ -1,71 +1,25 @@
-/* General Styles */
-body {
-    font-family: 'Georgia', serif;
-    background-color: #f8f1e5;
-    color: #3d2c2e;
-    text-align: center;
-    padding: 20px;
-}
-
-h1 {
-    font-size: 3rem;
-    color: #5e4d4f;
-    margin-bottom: 30px;
-    text-shadow: 2px 2px 3px #a08983;
-}
-
-#book-form {
-    margin-bottom: 20px;
-}
-
-input[type="text"] {
-    padding: 8px;
-    margin-right: 10px;
-    width: 200px;
-    font-size: 1rem;
-    border: 1px solid #c5a880;
-    border-radius: 4px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-button {
-    padding: 10px 20px;
-    background-color: #8c5c4c;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s;
-    margin-right: 10px;
-}
-
-button:hover {
-    background-color: #a16d57;
-}
-
 /* Bookshelf Styles */
 .bookshelf {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start; /* Align books side by side */
-    gap: 20px; /* Add spacing between books */
+    justify-content: flex-start;
+    gap: 20px; /* Spacing between books */
     margin-top: 40px;
     padding: 20px;
     background-color: #e5d3c5;
     border-radius: 10px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+    max-width: 100%; /* Adjust container to fit all books */
 }
 
+/* Individual Book Styles */
 .book {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100px; /* Maintain proper width */
+    width: 120px; /* Slightly wider to make room for text */
     height: 200px;
-    margin: 10px;
     background-color: #b5835a;
     color: white;
     font-family: 'Courier New', monospace;
@@ -76,22 +30,26 @@ button:hover {
     transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
     position: relative;
-    overflow: hidden; /* Ensure the text doesn't overflow */
+    overflow: hidden;
+    flex: 0 0 auto; /* Make sure they don't stretch or shrink */
 }
 
+/* Title and Author Text Wrapping */
 .book-title, .book-author {
     margin: 5px 0;
     font-size: 12px; /* Adjusted for better fit */
     text-align: center;
-    word-break: break-word; /* Prevent text from overflowing */
-    white-space: normal; /* Allow text to wrap onto the next line */
+    word-break: break-word;
+    white-space: normal;
 }
 
+/* Book Hover Effect */
 .book:hover {
     transform: scale(1.1);
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4);
 }
 
+/* Delete Button */
 .book button {
     background-color: #ff6666;
     border: none;
@@ -107,26 +65,4 @@ button:hover {
 
 .book button:hover {
     background-color: #ff3333;
-}
-
-/* Additional Atmosphere */
-body:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url('https://www.transparenttextures.com/patterns/wood.png');
-    opacity: 0.1;
-    z-index: -1;
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-li {
-    list-style: none;
 }
