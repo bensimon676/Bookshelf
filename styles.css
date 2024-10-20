@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.bookshelf {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.book {
+    display: inline-block;
+    width: 100px;
+    height: 200px;
+    margin: 10px;
+    background-color: #f4a261;
+    text-align: center;
+    padding: 5px;
+    position: relative;
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+.book:hover {
+    transform: scale(1.2);
+}
+
+.book-title, .book-author {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#book-form {
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    padding: 5px;
+    margin-right: 10px;
+    width: 150px;
+}
+
+button {
+    padding: 5px 10px;
+    cursor: pointer;
+}
