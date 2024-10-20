@@ -49,7 +49,8 @@ button:hover {
 .bookshelf {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start; /* Align books side by side */
+    gap: 20px; /* Add spacing between books */
     margin-top: 40px;
     padding: 20px;
     background-color: #e5d3c5;
@@ -62,7 +63,7 @@ button:hover {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100px;  /* Adjusted to ensure they fit side by side */
+    width: 100px; /* Maintain proper width */
     height: 200px;
     margin: 10px;
     background-color: #b5835a;
@@ -75,18 +76,19 @@ button:hover {
     transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
     position: relative;
+    overflow: hidden; /* Ensure the text doesn't overflow */
 }
 
 .book-title, .book-author {
     margin: 5px 0;
-    font-size: 12px;  /* Adjusted for better fit */
-    overflow-wrap: break-word;  /* Wrap long text */
-    word-wrap: break-word;      /* Break long words */
-    hyphens: auto;              /* Automatic hyphenation */
+    font-size: 12px; /* Adjusted for better fit */
+    text-align: center;
+    word-break: break-word; /* Prevent text from overflowing */
+    white-space: normal; /* Allow text to wrap onto the next line */
 }
 
 .book:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4);
 }
 
