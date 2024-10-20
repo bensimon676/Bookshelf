@@ -1,37 +1,17 @@
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
-}
-
-.bookshelf {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
-
-.book {
-    display: inline-block;
-    width: 100px;
-    height: 200px;
-    margin: 10px;
-    background-color: #f4a261;
+    font-family: 'Georgia', serif;
+    background-color: #f8f1e5;
+    color: #3d2c2e;
     text-align: center;
-    padding: 5px;
-    position: relative;
-    transition: transform 0.3s;
-    cursor: pointer;
+    padding: 20px;
 }
 
-.book:hover {
-    transform: scale(1.2);
-}
-
-.book-title, .book-author {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+h1 {
+    font-size: 3rem;
+    color: #5e4d4f;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 3px #a08983;
 }
 
 #book-form {
@@ -39,12 +19,94 @@ body {
 }
 
 input[type="text"] {
-    padding: 5px;
+    padding: 8px;
     margin-right: 10px;
-    width: 150px;
+    width: 200px;
+    font-size: 1rem;
+    border: 1px solid #c5a880;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 button {
-    padding: 5px 10px;
+    padding: 10px 20px;
+    background-color: #8c5c4c;
+    color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #a16d57;
+}
+
+/* Bookshelf Styles */
+.bookshelf {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #e5d3c5;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.book {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 200px;
+    margin: 10px;
+    background-color: #b5835a;
+    color: white;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+}
+
+.book-title, .book-author {
+    margin: 5px 0;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.book:hover {
+    transform: scale(1.2);
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Additional Atmosphere */
+body:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('https://www.transparenttextures.com/patterns/wood.png');
+    opacity: 0.1;
+    z-index: -1;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    list-style: none;
 }
