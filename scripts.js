@@ -1,5 +1,15 @@
 let books = [];
 
+// Load books from localStorage on page load
+window.onload = function () {
+    const savedBooks = localStorage.getItem('bookshelf');
+    if (savedBooks) {
+        books = JSON.parse(savedBooks);
+        renderBooks();
+    }
+};
+
+// Add a new book to the bookshelf
 function addBook() {
     const title = document.getElementById('book-title').value;
     const author = document.getElementById('book-author').value;
@@ -12,6 +22,13 @@ function addBook() {
     }
 }
 
+// Save the current books to localStorage
+function saveBooks() {
+    localStorage.setItem('bookshelf', JSON.stringify(books));
+    alert('Bookshelf saved!');
+}
+
+// Render the list of books on the bookshelf
 function renderBooks() {
     const bookList = document.getElementById('book-list');
     bookList.innerHTML = ''; // Clear current books
@@ -26,11 +43,19 @@ function renderBooks() {
         bookItem.innerHTML = `
             <div class="book-title">${book.title}</div>
             <div class="book-author">${book.author}</div>
+            <button onclick="deleteBook(${index})">X</button>
         `;
         bookList.appendChild(bookItem);
     });
 }
 
+// Delete a specific book
+function deleteBook(index) {
+    books.splice(index, 1);
+    renderBooks();
+}
+
+// Allow books to be reordered via drag and drop
 function allowDrop(event) {
     event.preventDefault();
 }
