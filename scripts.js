@@ -2,12 +2,19 @@ let books = [];
 
 // Load books from localStorage on page load
 window.onload = function () {
+    loadBooks();
+};
+
+// Load books from localStorage and render them
+function loadBooks() {
     const savedBooks = localStorage.getItem('bookshelf');
     if (savedBooks) {
         books = JSON.parse(savedBooks);
         renderBooks();
+    } else {
+        books = [];
     }
-};
+}
 
 // Add a new book to the bookshelf
 function addBook() {
