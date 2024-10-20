@@ -2,6 +2,7 @@
 let books = [];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Load books from local storage
 window.onload = function() {
     loadBooks();
@@ -18,6 +19,8 @@ window.onload = function () {
 >>>>>>> parent of c29a25d (ahh)
 
 // Function to add a book
+=======
+>>>>>>> parent of e687280 (blah)
 function addBook() {
     const title = document.getElementById("bookTitle").value;
     const author = document.getElementById("bookAuthor").value;
@@ -30,12 +33,16 @@ function addBook() {
     }
 }
 
+<<<<<<< HEAD
 // Function to render books on the shelf
+=======
+>>>>>>> parent of e687280 (blah)
 function renderBooks() {
     const bookshelf = document.getElementById("bookshelf");
     bookshelf.innerHTML = ''; // Clear current books
 
     books.forEach((book, index) => {
+<<<<<<< HEAD
         const bookElement = document.createElement("div");
         bookElement.classList.add("book");
 
@@ -71,6 +78,24 @@ function deleteBook(index) {
 // Save books to local storage
 function saveBooks() {
     localStorage.setItem("books", JSON.stringify(books));
+=======
+        const bookItem = document.createElement('li');
+        bookItem.className = 'book';
+        bookItem.draggable = true;
+        bookItem.ondragstart = (event) => drag(event, index);
+        bookItem.ondrop = (event) => drop(event, index);
+        bookItem.ondragover = (event) => allowDrop(event);
+        bookItem.innerHTML = `
+            <div class="book-title">${book.title}</div>
+            <div class="book-author">${book.author}</div>
+        `;
+        bookList.appendChild(bookItem);
+    });
+}
+
+function allowDrop(event) {
+    event.preventDefault();
+>>>>>>> parent of e687280 (blah)
 }
 
 // Load books from local storage
