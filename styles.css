@@ -9,6 +9,8 @@
     background-color: #e5d3c5;
     border-radius: 10px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+    width: 100%; /* Ensure the bookshelf uses full width of the container */
+    max-width: 1200px; /* Adjust to prevent overflow and give space for books */
 }
 
 /* Individual Book Styles */
@@ -26,11 +28,13 @@
     padding: 10px;
     border-radius: 4px;
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s, z-index 0.3s;
     cursor: pointer;
     position: relative;
     flex-shrink: 0; /* Prevent shrinking */
     flex-grow: 0; /* Prevent growing */
+    z-index: 1; /* Ensure the default z-index is low */
+    overflow: hidden;
 }
 
 /* Title and Author Text Wrapping */
@@ -46,6 +50,7 @@
 .book:hover {
     transform: scale(1.1);
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4);
+    z-index: 1000; /* Bring the hovered book to the front */
 }
 
 /* Delete Button */
