@@ -1,15 +1,14 @@
 /* Bookshelf Styles */
 .bookshelf {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
+    flex-wrap: wrap; /* Ensures wrapping if books exceed the container width */
+    justify-content: flex-start; /* Align items to the left */
     gap: 20px; /* Spacing between books */
     margin-top: 40px;
     padding: 20px;
     background-color: #e5d3c5;
     border-radius: 10px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
-    max-width: 100%; /* Adjust container to fit all books */
 }
 
 /* Individual Book Styles */
@@ -18,8 +17,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 120px; /* Slightly wider to make room for text */
-    height: 200px;
+    width: 120px; /* Set a fixed width for each book */
+    height: 200px; /* Set a fixed height for each book */
     background-color: #b5835a;
     color: white;
     font-family: 'Courier New', monospace;
@@ -30,14 +29,14 @@
     transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
     position: relative;
-    overflow: hidden;
-    flex: 0 0 auto; /* Make sure they don't stretch or shrink */
+    flex-shrink: 0; /* Prevent shrinking */
+    flex-grow: 0; /* Prevent growing */
 }
 
 /* Title and Author Text Wrapping */
 .book-title, .book-author {
     margin: 5px 0;
-    font-size: 12px; /* Adjusted for better fit */
+    font-size: 12px; /* Adjusted font size */
     text-align: center;
     word-break: break-word;
     white-space: normal;
