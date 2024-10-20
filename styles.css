@@ -1,113 +1,101 @@
 body {
-    font-family: 'Playfair Display', serif;
-    background-color: #f5e9dc;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.container {
-    width: 80%;
-    max-width: 1200px;
-    margin: auto;
+    font-family: 'Georgia', serif;
+    background-color: #f3f0e9;
+    color: #4f3a32;
     text-align: center;
+    margin: 0;
+    padding: 20px;
 }
 
 h1 {
-    font-size: 3rem;
-    color: #4b3e33;
-    text-shadow: 2px 2px #ccb8a1;
-    margin-bottom: 30px;
-}
-
-.input-container {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 30px;
+    font-size: 3em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #5c4033;
 }
 
 input {
-    padding: 10px;
-    font-size: 1rem;
-    border: 2px solid #ccb8a1;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #4b3e33;
+    padding: 8px;
+    font-size: 16px;
+    margin: 10px;
+    border: 1px solid #c8b6a0;
+    border-radius: 4px;
 }
 
 button {
-    padding: 10px 15px;
-    font-size: 1rem;
-    background-color: #b5835a;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #b27348;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
-    background-color: #8a6242;
+    background-color: #8e5736;
 }
 
 .bookshelf {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 20px;
     padding: 20px;
-    background-color: #e5d3c5;
-    border-radius: 10px;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .book {
+    width: 120px;
+    height: 200px;
+    margin: 10px;
+    background-color: #d19a66;
+    color: white;
+    position: relative;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    width: 120px;
-    height: 200px;
-    background-color: #b5835a;
-    color: white;
-    font-family: 'Playfair Display', serif;
-    text-align: center;
-    padding: 10px;
-    border-radius: 4px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-    position: relative;
-    transition: transform 0.3s ease, z-index 0.3s ease;
-    z-index: 1;
-}
-
-.book-title, .book-author {
-    font-size: 0.9rem;
-    margin: 5px 0;
-    word-wrap: break-word;
+    cursor: pointer;
+    transition: transform 0.2s;
 }
 
 .book:hover {
-    transform: scale(1.2);
-    z-index: 1000;
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+    z-index: 2;
 }
 
-button.delete-button {
+.book button {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
     position: absolute;
     top: 5px;
     right: 5px;
-    background-color: #ff6b6b;
-    border: none;
-    border-radius: 50%;
-    padding: 5px;
-    color: white;
-    cursor: pointer;
 }
 
-button.delete-button:hover {
-    background-color: #ff3838;
+.book button:hover {
+    background-color: darkred;
+}
+
+.edit-color {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #8e5736;
+    color: white;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.edit-color:hover {
+    background-color: #5c4033;
 }

@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Bookshelf</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>My Bookshelf</h1>
-        <div class="input-container">
-            <input type="text" id="bookTitle" placeholder="Book Title">
-            <input type="text" id="bookAuthor" placeholder="Book Author">
-            <button onclick="addBook()">Add Book</button>
-            <button onclick="saveBooks()">Save Books</button>
-        </div>
-        <div class="bookshelf" id="bookshelf"></div>
+    <h1>My Bookshelf</h1>
+
+    <div>
+        <input type="text" id="bookTitle" placeholder="Book Title">
+        <input type="text" id="bookAuthor" placeholder="Book Author">
+        <input type="color" id="bookColor" value="#d19a66" placeholder="Book Color">
+        <button onclick="addBook()">Add Book</button>
+        <button onclick="saveBooks()">Save Books</button>
     </div>
-    
+
+    <div id="bookshelf" class="bookshelf"></div>
+
     <script src="script.js"></script>
 </body>
 </html>
