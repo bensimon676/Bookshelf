@@ -16,12 +16,6 @@ function addBook() {
         saveBooks();
     }
 }
-function rgbToHex(rgb) {
-    const result = rgb.match(/\d+/g);
-    return result
-        ? "#" + ((1 << 24) + (parseInt(result[0]) << 16) + (parseInt(result[1]) << 8) + parseInt(result[2])).toString(16).slice(1).toUpperCase()
-        : rgb;
-}
 
 function addBookToShelf(title, author, color) {
     const bookshelf = document.getElementById('bookshelf');
@@ -41,20 +35,17 @@ function addBookToShelf(title, author, color) {
     bookDiv.appendChild(deleteBtn);
     
     // Add edit color button
+    const editColorBtn = document.createElement('button');
+    editColorBtn.classList.add('edit-color');
+    editColorBtn.innerHTML = '🎨';
     editColorBtn.onclick = function () {
-        const colorInput = document.createElement('input');
-        colorInput.type = 'color';
-        colorInput.value = rgbToHex(bookDiv.style.backgroundColor); // Set current color as the initial value
-    
-        // Trigger the color input dialog
-        colorInput.click();
-    
-        colorInput.oninput = function () {
-            bookDiv.style.backgroundColor = colorInput.value;
+        const newColor = prompt('Enter a new color (hex or name):', bookDiv.style.backgroundColor);
+        if (newColor) {
+            bookDiv.style.backgroundColor = newColor;
             saveBooks();
-        };
+        }
     };
-    
+    bookDiv.appendChild(editColorBtn);
     
     // Add drag-and-drop functionality
     bookDiv.setAttribute('draggable', true);
