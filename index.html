@@ -1,25 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Web App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>My Bookshelf</title>
 </head>
 <body>
-  <button id="add-book">Add Book</button>
-  <button id="save-books">Save Books</button>
+    <h1>My Bookshelf</h1>
+    <input type="text" id="titleInput" placeholder="Book Title">
+    <input type="text" id="authorInput" placeholder="Book Author">
+    <button id="addButton">Add Book</button>
+    <div id="bookshelf" class="bookshelf"></div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById("add-book").onclick = addBook;
-      document.getElementById("save-books").onclick = saveBooks;
-    }); 
-
-    function addBook() {
-      // Your add book logic
-    }
-
-    function saveBooks() {
-      // Your save books logic
-    }
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>

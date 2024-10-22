@@ -1,101 +1,50 @@
-body {
-    font-family: 'Georgia', serif;
-    background-color: #f3f0e9;
-    color: #4f3a32;
-    text-align: center;
-    margin: 0;
-    padding: 20px;
-}
-
-h1 {
-    font-size: 3em;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #5c4033;
-}
-
-input {
-    padding: 8px;
-    font-size: 16px;
-    margin: 10px;
-    border: 1px solid #c8b6a0;
-    border-radius: 4px;
-}
-
-button {
-    padding: 10px;
-    font-size: 16px;
-    background-color: #b27348;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #8e5736;
-}
-
-.bookshelf {
+/* Make the bookshelf look like an actual bookshelf */
+#bookshelf {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
+    background-color: #f3eac3; /* Bookshelf background */
     padding: 20px;
+    justify-content: space-around;
+    align-items: flex-start;
+    border: 5px solid #8b5e34; /* Wood-colored frame */
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .book {
-    width: 120px;
-    height: 200px;
+    width: 80px;
+    height: 180px;
     margin: 10px;
-    background-color: #d19a66;
-    color: white;
-    position: relative;
-    text-align: center;
-    font-family: 'Courier New', Courier, monospace;
-    padding: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.2s;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    position: relative;
+    font-family: 'Georgia', serif; /* Inviting font */
 }
 
-.book:hover {
-    transform: scale(1.1);
-    z-index: 2;
+.book-content p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: white; /* Text color on book cover */
 }
 
-.book button {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
+.delete-btn {
     background-color: red;
     color: white;
+    border-radius: 50%;
     border: none;
-    cursor: pointer;
-    position: absolute;
-    top: 5px;
-    right: 5px;
-}
-
-.book button:hover {
-    background-color: darkred;
-}
-
-.edit-color {
     width: 25px;
     height: 25px;
-    border-radius: 50%;
-    background-color: #8e5736;
-    color: white;
-    border: none;
-    cursor: pointer;
     position: absolute;
-    bottom: 5px;
-    right: 5px;
-}
-
-.edit-color:hover {
-    background-color: #5c4033;
+    top: -10px;
+    right: -10px;
+    font-size: 14px;
+    text-align: center;
+    line-height: 22px; /* Vertically center "X" */
+    cursor: pointer;
 }
