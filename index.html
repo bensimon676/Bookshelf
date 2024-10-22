@@ -3,20 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Bookshelf</title>
     <link rel="stylesheet" href="styles.css">
+    <title>My Bookshelf</title>
 </head>
 <body>
     <h1>My Bookshelf</h1>
-
-    <div>
-        <input type="text" id="bookTitle" placeholder="Book Title">
-        <input type="text" id="bookAuthor" placeholder="Book Author">
-        <input type="color" id="bookColor" value="#d19a66" placeholder="Book Color">
-        <button onclick="addBook()">Add Book</button>
-        <button onclick="saveBooks()">Save Books</button>
-    </div>
-
+    <input type="text" id="titleInput" placeholder="Book Title">
+    <input type="text" id="authorInput" placeholder="Book Author">
+    <button id="addButton">Add Book</button>
+    <button id="saveButton">Save Books</button>
     <div id="bookshelf" class="bookshelf"></div>
 
     <script src="script.js"></script>

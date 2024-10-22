@@ -1,106 +1,88 @@
-window.onload = function() {
-    loadBooks();
-};
+document.addEventListener("DOMContentLoaded", function() {
 
-// Function to add a book
-function addBook() {
-    const titleInput = document.getElementById("book-title");
-    const authorInput = document.getElementById("book-author");
+    const bookshelfContainer = document.getElementById('bookshelf');
+    const titleInput = document.getElementById('titleInput');
+    const authorInput = document.getElementById('authorInput');
+    const addButton = document.getElementById('addButton');
+    const saveButton = document.getElementById('saveButton');
+    let books = JSON.parse(localStorage.getItem('books')) || [];
 
-    const title = titleInput.value;
-    const author = authorInput.value;
+    // Function to add a new book to the bookshelf
+    function addBook() {
+        const bookTitle = titleInput.value;
+        const bookAuthor = authorInput.value;
+        const bookColor = "#d3a383"; // Default color
 
-    if (title === "" || author === "") {
-        alert("Please fill in both the book title and author.");
-        return;
+        if (bookTitle && bookAuthor) {
+            const newBook = { title: bookTitle, author: bookAuthor, color: bookColor };
+            books.push(newBook);
+            localStorage.setItem('books', JSON.stringify(books));
+            renderBookshelf();
+            titleInput.value = '';
+            authorInput.value = '';
+        }
     }
 
-    createBookElement(title, author, '#B07A5B'); // Default book color
-    saveBooks();
+    // Function to render the bookshelf with the current books
+    function renderBookshelf() {
+        bookshelfContainer.innerHTML = ''; // Clear the container
 
-    titleInput.value = "";
-    authorInput.value = "";
-}
+        books.forEach((book, index) => {
+            const bookElement = document.createElement('div');
+            bookElement.classList.add('book');
+            bookElement.style.backgroundColor = book.color;
 
-// Function to save books to localStorage
-function saveBooks() {
-    const bookDivs = document.getElementsByClassName("book");
-    const books = [];
+            // Set book content
+            bookElement.innerHTML = `
+                <div class="book-content">
+                    <p>${book.title}</p>
+                    <p>${book.author}</p>
+                </div>
+                <button class="delete-btn">X</button>
+                <div class="color-picker">
+                    <label>Color:</label>
+                    <select class="color-selection">
+                        <option value="#d3a383">Brown</option>
+                        <option value="#f28b82">Red</option>
+                        <option value="#fbbc04">Yellow</option>
+                        <option value="#34a853">Green</option>
+                        <option value="#4285f4">Blue</option>
+                    </select>
+                </div>
+            `;
 
-    for (let bookDiv of bookDivs) {
-        const title = bookDiv.querySelector("p:nth-child(1)").textContent;
-        const author = bookDiv.querySelector("p:nth-child(2)").textContent;
-        const color = bookDiv.style.backgroundColor;
-        books.push({ title, author, color });
-    }
-
-    localStorage.setItem("books", JSON.stringify(books));
-}
-
-// Function to load books from localStorage
-function loadBooks() {
-    const books = JSON.parse(localStorage.getItem("books")) || [];
-
-    for (let book of books) {
-        createBookElement(book.title, book.author, book.color);
-    }
-}
-
-// Function to create and display a book element
-function createBookElement(title, author, color) {
-    const bookshelf = document.getElementById("bookshelf");
-
-    const bookDiv = document.createElement("div");
-    bookDiv.classList.add("book");
-    bookDiv.style.backgroundColor = color;
-
-    const titlePara = document.createElement("p");
-    titlePara.textContent = title;
-
-    const authorPara = document.createElement("p");
-    authorPara.textContent = author;
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.classList.add("delete-btn");
-    deleteBtn.textContent = "X";
-    deleteBtn.onclick = function () {
-        bookshelf.removeChild(bookDiv);
-        saveBooks();
-    };
-
-    // Add edit color button
-    const editColorBtn = document.createElement("button");
-    editColorBtn.classList.add("edit-color-btn");
-    editColorBtn.textContent = "🎨";
-
-    // Color preset options
-    editColorBtn.onclick = function () {
-        const colorOptions = ["#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#FFD433"];
-        const colorMenu = document.createElement("div");
-        colorMenu.classList.add("color-menu");
-
-        colorOptions.forEach(function (presetColor) {
-            const colorOption = document.createElement("div");
-            colorOption.classList.add("color-option");
-            colorOption.style.backgroundColor = presetColor;
-            colorOption.onclick = function () {
-                bookDiv.style.backgroundColor = presetColor;
-                saveBooks();
-                colorMenu.remove(); // Remove the menu after color selection
+            // Delete button
+            const deleteButton = bookElement.querySelector('.delete-btn');
+            deleteButton.onclick = function() {
+                books.splice(index, 1); // Remove book
+                localStorage.setItem('books', JSON.stringify(books));
+                renderBookshelf(); // Re-render the bookshelf
             };
-            colorMenu.appendChild(colorOption);
+
+            // Color picker
+            const colorPicker = bookElement.querySelector('.color-selection');
+            colorPicker.value = book.color; // Set the current color
+            colorPicker.onchange = function() {
+                books[index].color = colorPicker.value; // Update book color
+                localStorage.setItem('books', JSON.stringify(books));
+                renderBookshelf(); // Re-render the bookshelf
+            };
+
+            bookshelfContainer.appendChild(bookElement);
         });
+    }
 
-        bookDiv.appendChild(colorMenu);
-    };
+    // Event listeners for buttons
+    if (addButton) {
+        addButton.onclick = addBook;
+    }
+    
+    if (saveButton) {
+        saveButton.onclick = function() {
+            localStorage.setItem('books', JSON.stringify(books));
+        };
+    }
 
-    bookDiv.appendChild(titlePara);
-    bookDiv.appendChild(authorPara);
-    bookDiv.appendChild(editColorBtn);
-    bookDiv.appendChild(deleteBtn);
-    bookshelf.appendChild(bookDiv);
-}
-
-// Add event listeners for buttons
-document.getElementById("add-book").onclick = addBook;
-document.getElementById("save-books").onclick = saveBooks;
+    // Initial render of the bookshelf
+    renderBookshelf();
+});
