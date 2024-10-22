@@ -1,89 +1,106 @@
-// Load books from localStorage
-window.onload = function () {
-    const savedBooks = JSON.parse(localStorage.getItem('books'));
-    if (savedBooks) {
-        savedBooks.forEach(book => addBookToShelf(book.title, book.author, book.color));
-    }
+window.onload = function() {
+    loadBooks();
 };
 
+// Function to add a book
 function addBook() {
-    const title = document.getElementById('bookTitle').value;
-    const author = document.getElementById('bookAuthor').value;
-    const color = document.getElementById('bookColor').value;
+    const titleInput = document.getElementById("book-title");
+    const authorInput = document.getElementById("book-author");
 
-    if (title && author) {
-        addBookToShelf(title, author, color);
-        saveBooks();
+    const title = titleInput.value;
+    const author = authorInput.value;
+
+    if (title === "" || author === "") {
+        alert("Please fill in both the book title and author.");
+        return;
+    }
+
+    createBookElement(title, author, '#B07A5B'); // Default book color
+    saveBooks();
+
+    titleInput.value = "";
+    authorInput.value = "";
+}
+
+// Function to save books to localStorage
+function saveBooks() {
+    const bookDivs = document.getElementsByClassName("book");
+    const books = [];
+
+    for (let bookDiv of bookDivs) {
+        const title = bookDiv.querySelector("p:nth-child(1)").textContent;
+        const author = bookDiv.querySelector("p:nth-child(2)").textContent;
+        const color = bookDiv.style.backgroundColor;
+        books.push({ title, author, color });
+    }
+
+    localStorage.setItem("books", JSON.stringify(books));
+}
+
+// Function to load books from localStorage
+function loadBooks() {
+    const books = JSON.parse(localStorage.getItem("books")) || [];
+
+    for (let book of books) {
+        createBookElement(book.title, book.author, book.color);
     }
 }
 
-function addBookToShelf(title, author, color) {
-    const bookshelf = document.getElementById('bookshelf');
+// Function to create and display a book element
+function createBookElement(title, author, color) {
+    const bookshelf = document.getElementById("bookshelf");
 
-    const bookDiv = document.createElement('div');
-    bookDiv.classList.add('book');
+    const bookDiv = document.createElement("div");
+    bookDiv.classList.add("book");
     bookDiv.style.backgroundColor = color;
-    bookDiv.innerHTML = `<div>${title}</div><div>${author}</div>`;
-    
-    // Add delete button
-    const deleteBtn = document.createElement('button');
-    deleteBtn.innerHTML = 'X';
+
+    const titlePara = document.createElement("p");
+    titlePara.textContent = title;
+
+    const authorPara = document.createElement("p");
+    authorPara.textContent = author;
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.classList.add("delete-btn");
+    deleteBtn.textContent = "X";
     deleteBtn.onclick = function () {
-        bookDiv.remove();
+        bookshelf.removeChild(bookDiv);
         saveBooks();
     };
-    bookDiv.appendChild(deleteBtn);
-    
+
     // Add edit color button
-    const editColorBtn = document.createElement('button');
-    editColorBtn.classList.add('edit-color');
-    editColorBtn.innerHTML = '🎨';
+    const editColorBtn = document.createElement("button");
+    editColorBtn.classList.add("edit-color-btn");
+    editColorBtn.textContent = "🎨";
+
+    // Color preset options
     editColorBtn.onclick = function () {
-        const newColor = prompt('Enter a new color (hex or name):', bookDiv.style.backgroundColor);
-        if (newColor) {
-            bookDiv.style.backgroundColor = newColor;
-            saveBooks();
-        }
+        const colorOptions = ["#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#FFD433"];
+        const colorMenu = document.createElement("div");
+        colorMenu.classList.add("color-menu");
+
+        colorOptions.forEach(function (presetColor) {
+            const colorOption = document.createElement("div");
+            colorOption.classList.add("color-option");
+            colorOption.style.backgroundColor = presetColor;
+            colorOption.onclick = function () {
+                bookDiv.style.backgroundColor = presetColor;
+                saveBooks();
+                colorMenu.remove(); // Remove the menu after color selection
+            };
+            colorMenu.appendChild(colorOption);
+        });
+
+        bookDiv.appendChild(colorMenu);
     };
+
+    bookDiv.appendChild(titlePara);
+    bookDiv.appendChild(authorPara);
     bookDiv.appendChild(editColorBtn);
-    
-    // Add drag-and-drop functionality
-    bookDiv.setAttribute('draggable', true);
-    bookDiv.id = title.replace(/\s+/g, '') + author.replace(/\s+/g, '');
-    
-    addDragAndDropListeners(bookDiv);
-    
+    bookDiv.appendChild(deleteBtn);
     bookshelf.appendChild(bookDiv);
 }
 
-function addDragAndDropListeners(bookElement) {
-    bookElement.addEventListener('dragstart', function (e) {
-        e.dataTransfer.setData('text/plain', e.target.id);
-    });
-
-    bookElement.addEventListener('dragover', function (e) {
-        e.preventDefault();
-    });
-
-    bookElement.addEventListener('drop', function (e) {
-        e.preventDefault();
-        const draggedId = e.dataTransfer.getData('text');
-        const draggedElement = document.getElementById(draggedId);
-        const parent = bookElement.parentElement;
-
-        parent.insertBefore(draggedElement, bookElement.nextSibling);
-        saveBooks(); // Re-save order after drop
-    });
-}
-
-function saveBooks() {
-    const bookshelf = document.getElementById('bookshelf');
-    const books = [];
-    Array.from(bookshelf.children).forEach(bookDiv => {
-        const title = bookDiv.children[0].innerText;
-        const author = bookDiv.children[1].innerText;
-        const color = bookDiv.style.backgroundColor;
-        books.push({ title, author, color });
-    });
-    localStorage.setItem('books', JSON.stringify(books));
-}
+// Add event listeners for buttons
+document.getElementById("add-book").onclick = addBook;
+document.getElementById("save-books").onclick = saveBooks;
