@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function initClient() {
     gapi.client.init({
-        apiKey: 'YOUR_API_KEY',
-        clientId: 'YOUR_CLIENT_ID',
+        apiKey: 'AIzaSyDBGFrt9ObAz0oEpkTcPHA-5M5Dwt1lkXM',
+        clientId: '850860820123-fpd7jd5t040vflodkrao0cea57ufi4jq.apps.googleusercontent.com',
         discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
         scope: SCOPE
     }).then(function () {
