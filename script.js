@@ -1,127 +1,82 @@
-const CLIENT_ID = '850860820123-fpd7jd5t040vflodkrao0cea57ufi4jq.apps.googleusercontent.com';
+let GoogleAuth;
+
 const SCOPE = 'https://www.googleapis.com/auth/drive.file';
-let auth2, books = [];
 
-// Initialize Google API client
+document.addEventListener('DOMContentLoaded', function () {
+    gapi.load('client:auth2', initClient);
+
+    document.getElementById("google-signin-btn").onclick = handleAuthClick;
+    document.getElementById("save-bookshelf-btn").onclick = saveBookshelf;
+    document.getElementById("load-bookshelf-btn").onclick = loadBookshelf;
+});
+
 function initClient() {
-  gapi.load('auth2', function() {
-    auth2 = gapi.auth2.init({
-      client_id: CLIENT_ID,
-      scope: SCOPE
+    gapi.client.init({
+        apiKey: 'YOUR_API_KEY',
+        clientId: 'YOUR_CLIENT_ID',
+        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+        scope: SCOPE
+    }).then(function () {
+        GoogleAuth = gapi.auth2.getAuthInstance();
     });
-  });
 }
 
-// Sign in and load books
-document.getElementById('signin-button').onclick = function() {
-  auth2.signIn().then(loadBooksFromGoogleDrive);
-};
+function handleAuthClick() {
+    GoogleAuth.signIn().then(() => {
+        console.log("User signed in");
+    });
+}
 
-// Add new book
-document.getElementById('add-book').onclick = function() {
-  const book = {
-    title: prompt("Enter book title:"),
-    author: prompt("Enter book author:"),
-    color: randomColor()
-  };
-  books.push(book);
-  renderBooks();
-  autoSave();
-};
-
-// Render the bookshelf UI
-function renderBooks() {
-  const bookshelf = document.getElementById('bookshelf');
-  bookshelf.innerHTML = '';
-  books.forEach((book, index) => {
-    const bookElem = document.createElement('div');
-    bookElem.className = 'book';
-    bookElem.style.backgroundColor = book.color;
-
-    const titleElem = document.createElement('div');
-    titleElem.className = 'book-title';
-    titleElem.textContent = book.title;
-
-    const authorElem = document.createElement('div');
-    authorElem.className = 'book-author';
-    authorElem.textContent = book.author;
-
-    const deleteButton = document.createElement('button');
-    deleteButton.className = 'delete-book';
-    deleteButton.textContent = 'X';
-    deleteButton.onclick = function () {
-      deleteBook(index);
+function saveBookshelf() {
+    const currentBookshelfState = {
+        books: [...], // Your bookshelf data
     };
-
-    bookElem.appendChild(deleteButton);
-    bookElem.appendChild(titleElem);
-    bookElem.appendChild(authorElem);
-    bookshelf.appendChild(bookElem);
-  });
+    saveToGoogleDrive(currentBookshelfState);
 }
 
-// Random color generator for book covers
-function randomColor() {
-  const colors = ['#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', '#bdb2ff', '#ffc6ff'];
-  return colors[Math.floor(Math.random() * colors.length)];
+function loadBookshelf() {
+    loadFromGoogleDrive();
 }
 
-// Delete a book
-function deleteBook(index) {
-  books.splice(index, 1);
-  renderBooks();
-  autoSave();
-}
-
-// Auto-save to Google Drive whenever the bookshelf is updated
-function autoSave() {
-  saveBooksToGoogleDrive();
-}
-
-// Save books to Google Drive
-function saveBooksToGoogleDrive() {
-  const fileContent = JSON.stringify(books);
-  const file = new Blob([fileContent], { type: 'application/json' });
-
-  gapi.client.load('drive', 'v3', function() {
-    const metadata = {
-      name: 'bookshelf.json',
-      mimeType: 'application/json'
+// Save to Google Drive function
+function saveToGoogleDrive(content) {
+    const fileMetadata = {
+        'name': 'bookshelf-data.json',
+        'mimeType': 'application/json'
     };
-
-    const accessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+    const fileContent = new Blob([JSON.stringify(content)], { type: 'application/json' });
     const form = new FormData();
-    form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-    form.append('file', file);
+    form.append('metadata', new Blob([JSON.stringify(fileMetadata)], { type: 'application/json' }));
+    form.append('file', fileContent);
 
-    fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-      method: 'POST',
-      headers: new Headers({ 'Authorization': 'Bearer ' + accessToken }),
-      body: form,
-    }).then(response => response.json()).then(result => {
-      console.log('File saved to Google Drive', result);
-    }).catch(error => console.error('Error saving to Google Drive:', error));
-  });
+    gapi.client.drive.files.create({
+        resource: fileMetadata,
+        media: {
+            mimeType: 'application/json',
+            body: fileContent
+        },
+        fields: 'id'
+    }).then(function (response) {
+        console.log('File saved:', response);
+    });
 }
 
-// Load books from Google Drive
-function loadBooksFromGoogleDrive() {
-  gapi.client.load('drive', 'v3', function() {
-    const accessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
-
-    fetch('https://www.googleapis.com/drive/v3/files?q=name%3D\'bookshelf.json\'&spaces=drive&fields=files(id%2Cname)&access_token=' + accessToken)
-    .then(response => response.json())
-    .then(result => {
-      if (result.files && result.files.length > 0) {
-        const fileId = result.files[0].id;
-
-        fetch('https://www.googleapis.com/drive/v3/files/' + fileId + '?alt=media&access_token=' + accessToken)
-        .then(response => response.json())
-        .then(data => {
-          books = data || [];
-          renderBooks();
-        });
-      }
+// Load from Google Drive function
+function loadFromGoogleDrive() {
+    gapi.client.drive.files.list({
+        'pageSize': 10,
+        'fields': "nextPageToken, files(id, name)"
+    }).then(function (response) {
+        const files = response.result.files;
+        if (files && files.length > 0) {
+            const fileId = files[0].id;
+            gapi.client.drive.files.get({
+                fileId: fileId,
+                alt: 'media'
+            }).then(function (fileResponse) {
+                const bookshelfData = JSON.parse(fileResponse.body);
+                console.log('Loaded bookshelf data:', bookshelfData);
+            });
+        }
     });
-  });
 }
