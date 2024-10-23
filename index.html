@@ -1,110 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Bookshelf with Google Drive</title>
-  <script src="https://apis.google.com/js/api.js"></script>
-  <script>
-    let GoogleAuth;
-    let CLIENT_ID = '850860820123-fpd7jd5t040vflodkrao0cea57ufi4jq.apps.googleusercontent.com';
-    let API_KEY = 'AIzaSyDBGFrt9ObAz0oEpkTcPHA-5M5Dwt1lkXM';  // Replace with your actual API key if you set one up
-    let DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
-    let SCOPES = 'https://www.googleapis.com/auth/drive.file';
-
-    function handleClientLoad() {
-      gapi.load('client:auth2', initClient);
-    }
-
-    function initClient() {
-      gapi.client.init({
-        apiKey: API_KEY,
-        clientId: CLIENT_ID,
-        discoveryDocs: DISCOVERY_DOCS,
-        scope: SCOPES
-      }).then(function () {
-        GoogleAuth = gapi.auth2.getAuthInstance();
-
-        // Update sign-in state if already signed in
-        if (GoogleAuth.isSignedIn.get()) {
-          updateSigninStatus(GoogleAuth.isSignedIn.get());
-        }
-
-        document.getElementById("google-signin-btn").onclick = function() {
-          handleAuthClick();
-        };
-        
-        document.getElementById("save-bookshelf").onclick = saveBookshelfToDrive;
-        document.getElementById("load-bookshelf").onclick = loadBookshelfFromDrive;
-      }, function(error) {
-        console.log("Error initializing Google API client: ", error);
-      });
-    }
-
-    function handleAuthClick() {
-      GoogleAuth.signIn().then(() => {
-        console.log("User signed in");
-        updateSigninStatus(GoogleAuth.isSignedIn.get());
-      }).catch((error) => {
-        console.error("Error during sign-in: ", error);
-      });
-    }
-
-    function updateSigninStatus(isSignedIn) {
-      if (isSignedIn) {
-        document.getElementById('google-signin-btn').textContent = 'Signed In';
-      } else {
-        document.getElementById('google-signin-btn').textContent = 'Sign in with Google';
-      }
-    }
-
-    function saveBookshelfToDrive() {
-      // Example logic for saving bookshelf state (use your bookshelf object/data)
-      let bookshelfData = JSON.stringify({
-        books: [{ title: "Book 1", author: "Author 1" }, { title: "Book 2", author: "Author 2" }]
-      });
-
-      var fileMetadata = {
-        name: 'Bookshelf.json',
-        mimeType: 'application/json'
-      };
-      var media = {
-        mimeType: 'application/json',
-        body: bookshelfData
-      };
-      gapi.client.drive.files.create({
-        resource: fileMetadata,
-        media: media,
-        fields: 'id'
-      }).then(function(response) {
-        console.log('File saved to Drive with ID:', response.result.id);
-      }, function(error) {
-        console.error('Error saving file to Drive: ', error);
-      });
-    }
-
-    function loadBookshelfFromDrive() {
-      // Example logic for loading bookshelf state (you would adjust this)
-      gapi.client.drive.files.list({
-        pageSize: 10,
-        fields: "nextPageToken, files(id, name)"
-      }).then(function(response) {
-        let files = response.result.files;
-        if (files && files.length > 0) {
-          console.log('Files in Drive:', files);
-          // Add logic here to load bookshelf data from the Drive file.
-        } else {
-          console.log('No files found.');
-        }
-      }, function(error) {
-        console.error('Error loading files from Drive: ', error);
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', handleClientLoad);
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>My Bookshelf</title>
 </head>
 <body>
-  <button id="google-signin-btn">Sign in with Google</button>
-  <button id="save-bookshelf">Save Bookshelf</button>
-  <button id="load-bookshelf">Load Bookshelf</button>
+    <h1>My Bookshelf</h1>
+    <input type="text" id="titleInput" placeholder="Book Title">
+    <input type="text" id="authorInput" placeholder="Book Author">
+    <button id="addButton">Add Book</button>
+    <div id="bookshelf" class="bookshelf"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>

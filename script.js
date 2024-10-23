@@ -1,82 +1,70 @@
-let GoogleAuth;
+document.addEventListener("DOMContentLoaded", function() {
 
-const SCOPE = 'https://www.googleapis.com/auth/drive.file';
+    const bookshelfContainer = document.getElementById('bookshelf');
+    const titleInput = document.getElementById('titleInput');
+    const authorInput = document.getElementById('authorInput');
+    const addButton = document.getElementById('addButton');
+    let books = JSON.parse(localStorage.getItem('books')) || [];
 
-document.addEventListener('DOMContentLoaded', function () {
-    gapi.load('client:auth2', initClient);
+    // Function to add a new book to the bookshelf
+    function addBook() {
+        const bookTitle = titleInput.value;
+        const bookAuthor = authorInput.value;
+        const bookColor = getRandomColor(); // Randomly generated color
 
-    document.getElementById("google-signin-btn").onclick = handleAuthClick;
-    document.getElementById("save-bookshelf-btn").onclick = saveBookshelf;
-    document.getElementById("load-bookshelf-btn").onclick = loadBookshelf;
-});
-
-function initClient() {
-    gapi.client.init({
-        apiKey: 'AIzaSyDBGFrt9ObAz0oEpkTcPHA-5M5Dwt1lkXM',
-        clientId: '850860820123-fpd7jd5t040vflodkrao0cea57ufi4jq.apps.googleusercontent.com',
-        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-        scope: SCOPE
-    }).then(function () {
-        GoogleAuth = gapi.auth2.getAuthInstance();
-    });
-}
-
-function handleAuthClick() {
-    GoogleAuth.signIn().then(() => {
-        console.log("User signed in");
-    });
-}
-
-function saveBookshelf() {
-    const currentBookshelfState = {
-        books: [...], // Your bookshelf data
-    };
-    saveToGoogleDrive(currentBookshelfState);
-}
-
-function loadBookshelf() {
-    loadFromGoogleDrive();
-}
-
-// Save to Google Drive function
-function saveToGoogleDrive(content) {
-    const fileMetadata = {
-        'name': 'bookshelf-data.json',
-        'mimeType': 'application/json'
-    };
-    const fileContent = new Blob([JSON.stringify(content)], { type: 'application/json' });
-    const form = new FormData();
-    form.append('metadata', new Blob([JSON.stringify(fileMetadata)], { type: 'application/json' }));
-    form.append('file', fileContent);
-
-    gapi.client.drive.files.create({
-        resource: fileMetadata,
-        media: {
-            mimeType: 'application/json',
-            body: fileContent
-        },
-        fields: 'id'
-    }).then(function (response) {
-        console.log('File saved:', response);
-    });
-}
-
-// Load from Google Drive function
-function loadFromGoogleDrive() {
-    gapi.client.drive.files.list({
-        'pageSize': 10,
-        'fields': "nextPageToken, files(id, name)"
-    }).then(function (response) {
-        const files = response.result.files;
-        if (files && files.length > 0) {
-            const fileId = files[0].id;
-            gapi.client.drive.files.get({
-                fileId: fileId,
-                alt: 'media'
-            }).then(function (fileResponse) {
-                const bookshelfData = JSON.parse(fileResponse.body);
-                console.log('Loaded bookshelf data:', bookshelfData);
-            });
+        if (bookTitle && bookAuthor) {
+            const newBook = { title: bookTitle, author: bookAuthor, color: bookColor };
+            books.push(newBook);
+            localStorage.setItem('books', JSON.stringify(books));
+            renderBookshelf();
+            titleInput.value = '';
+            authorInput.value = '';
         }
-    });
 }
+
+    // Function to generate a random book cover color
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    // Function to render the bookshelf with the current books
+    function renderBookshelf() {
+        bookshelfContainer.innerHTML = ''; // Clear the container
+
+        books.forEach((book, index) => {
+            const bookElement = document.createElement('div');
+            bookElement.classList.add('book');
+            bookElement.style.backgroundColor = book.color; // Set random book color
+
+            // Set book content
+            bookElement.innerHTML = `
+                <div class="book-content">
+                    <p>${book.title}</p>
+                    <p>${book.author}</p>
+                </div>
+                <button class="delete-btn">X</button>
+            `;
+
+            // Delete button
+            const deleteButton = bookElement.querySelector('.delete-btn');
+            deleteButton.onclick = function() {
+                books.splice(index, 1); // Remove book
+                localStorage.setItem('books', JSON.stringify(books));
+                renderBookshelf(); // Re-render the bookshelf
+            };
+
+            bookshelfContainer.appendChild(bookElement);
+        });
+    }
+
+    // Event listeners for buttons
+    addButton.onclick = addBook;
+
+    // Initial render of the bookshelf
+    renderBookshelf();
+            });
