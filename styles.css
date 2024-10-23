@@ -1,50 +1,51 @@
-/* Make the bookshelf look like an actual bookshelf */
 #bookshelf {
     display: flex;
     flex-wrap: wrap;
-    background-color: #f3eac3; /* Bookshelf background */
-    padding: 20px;
-    justify-content: space-around;
-    align-items: flex-start;
-    border: 5px solid #8b5e34; /* Wood-colored frame */
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.book {
+    justify-content: space-evenly;
+    margin-top: 20px;
+  }
+  
+  .book {
     width: 70px;
     height: 180px;
-    margin: 10px;
+    background-color: lightblue;
+    border: 1px solid black;
+    margin: 5px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
+    justify-content: flex-end;
     padding: 10px;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+  }
+  
+  .book:hover {
+    transform: scale(1.1);
+    z-index: 2;
+  }
+  
+  .book-title {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+  
+  .book-author {
+    font-size: 12px;
+    margin-top: auto;
+  }
+  
+  .delete-book {
     position: relative;
-    font-family: 'Georgia', serif; /* Inviting font */
-}
-
-.book-content p {
-    margin: 5px 0;
-    font-size: 14px;
-    color: white; /* Text color on book cover */
-}
-
-.delete-btn {
+    top: -10px;
+    left: -10px;
     background-color: red;
     color: white;
-    border-radius: 50%;
     border: none;
-    width: 25px;
-    height: 25px;
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    font-size: 14px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
     text-align: center;
-    line-height: 22px; /* Vertically center "X" */
+    line-height: 18px;
     cursor: pointer;
-}
+    z-index: 3;
+  }
+  

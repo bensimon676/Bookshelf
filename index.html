@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>My Bookshelf</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookshelf</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script src="script.js"></script>
 </head>
 <body>
-    <h1>My Bookshelf</h1>
-    <input type="text" id="titleInput" placeholder="Book Title">
-    <input type="text" id="authorInput" placeholder="Book Author">
-    <button id="addButton">Add Book</button>
-    <div id="bookshelf" class="bookshelf"></div>
+  <button id="signin-button">Sign In with Google</button>
+  <button id="add-book">Add Book</button>
+  <div id="bookshelf"></div>
 
-    <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      initClient(); // Initialize Google API client on page load
+    });
+  </script>
 </body>
 </html>

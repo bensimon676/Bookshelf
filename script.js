@@ -1,70 +1,127 @@
-document.addEventListener("DOMContentLoaded", function() {
+const CLIENT_ID = '850860820123-fpd7jd5t040vflodkrao0cea57ufi4jq.apps.googleusercontent.com';
+const SCOPE = 'https://www.googleapis.com/auth/drive.file';
+let auth2, books = [];
 
-    const bookshelfContainer = document.getElementById('bookshelf');
-    const titleInput = document.getElementById('titleInput');
-    const authorInput = document.getElementById('authorInput');
-    const addButton = document.getElementById('addButton');
-    let books = JSON.parse(localStorage.getItem('books')) || [];
+// Initialize Google API client
+function initClient() {
+  gapi.load('auth2', function() {
+    auth2 = gapi.auth2.init({
+      client_id: CLIENT_ID,
+      scope: SCOPE
+    });
+  });
+}
 
-    // Function to add a new book to the bookshelf
-    function addBook() {
-        const bookTitle = titleInput.value;
-        const bookAuthor = authorInput.value;
-        const bookColor = getRandomColor(); // Randomly generated color
+// Sign in and load books
+document.getElementById('signin-button').onclick = function() {
+  auth2.signIn().then(loadBooksFromGoogleDrive);
+};
 
-        if (bookTitle && bookAuthor) {
-            const newBook = { title: bookTitle, author: bookAuthor, color: bookColor };
-            books.push(newBook);
-            localStorage.setItem('books', JSON.stringify(books));
-            renderBookshelf();
-            titleInput.value = '';
-            authorInput.value = '';
-        }
-    }
+// Add new book
+document.getElementById('add-book').onclick = function() {
+  const book = {
+    title: prompt("Enter book title:"),
+    author: prompt("Enter book author:"),
+    color: randomColor()
+  };
+  books.push(book);
+  renderBooks();
+  autoSave();
+};
 
-    // Function to generate a random book cover color
-    function getRandomColor() {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    }
+// Render the bookshelf UI
+function renderBooks() {
+  const bookshelf = document.getElementById('bookshelf');
+  bookshelf.innerHTML = '';
+  books.forEach((book, index) => {
+    const bookElem = document.createElement('div');
+    bookElem.className = 'book';
+    bookElem.style.backgroundColor = book.color;
 
-    // Function to render the bookshelf with the current books
-    function renderBookshelf() {
-        bookshelfContainer.innerHTML = ''; // Clear the container
+    const titleElem = document.createElement('div');
+    titleElem.className = 'book-title';
+    titleElem.textContent = book.title;
 
-        books.forEach((book, index) => {
-            const bookElement = document.createElement('div');
-            bookElement.classList.add('book');
-            bookElement.style.backgroundColor = book.color; // Set random book color
+    const authorElem = document.createElement('div');
+    authorElem.className = 'book-author';
+    authorElem.textContent = book.author;
 
-            // Set book content
-            bookElement.innerHTML = `
-                <div class="book-content">
-                    <p>${book.title}</p>
-                    <p>${book.author}</p>
-                </div>
-                <button class="delete-btn">X</button>
-            `;
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'delete-book';
+    deleteButton.textContent = 'X';
+    deleteButton.onclick = function () {
+      deleteBook(index);
+    };
 
-            // Delete button
-            const deleteButton = bookElement.querySelector('.delete-btn');
-            deleteButton.onclick = function() {
-                books.splice(index, 1); // Remove book
-                localStorage.setItem('books', JSON.stringify(books));
-                renderBookshelf(); // Re-render the bookshelf
-            };
+    bookElem.appendChild(deleteButton);
+    bookElem.appendChild(titleElem);
+    bookElem.appendChild(authorElem);
+    bookshelf.appendChild(bookElem);
+  });
+}
 
-            bookshelfContainer.appendChild(bookElement);
+// Random color generator for book covers
+function randomColor() {
+  const colors = ['#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', '#bdb2ff', '#ffc6ff'];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+// Delete a book
+function deleteBook(index) {
+  books.splice(index, 1);
+  renderBooks();
+  autoSave();
+}
+
+// Auto-save to Google Drive whenever the bookshelf is updated
+function autoSave() {
+  saveBooksToGoogleDrive();
+}
+
+// Save books to Google Drive
+function saveBooksToGoogleDrive() {
+  const fileContent = JSON.stringify(books);
+  const file = new Blob([fileContent], { type: 'application/json' });
+
+  gapi.client.load('drive', 'v3', function() {
+    const metadata = {
+      name: 'bookshelf.json',
+      mimeType: 'application/json'
+    };
+
+    const accessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+    const form = new FormData();
+    form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+    form.append('file', file);
+
+    fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+      method: 'POST',
+      headers: new Headers({ 'Authorization': 'Bearer ' + accessToken }),
+      body: form,
+    }).then(response => response.json()).then(result => {
+      console.log('File saved to Google Drive', result);
+    }).catch(error => console.error('Error saving to Google Drive:', error));
+  });
+}
+
+// Load books from Google Drive
+function loadBooksFromGoogleDrive() {
+  gapi.client.load('drive', 'v3', function() {
+    const accessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+
+    fetch('https://www.googleapis.com/drive/v3/files?q=name%3D\'bookshelf.json\'&spaces=drive&fields=files(id%2Cname)&access_token=' + accessToken)
+    .then(response => response.json())
+    .then(result => {
+      if (result.files && result.files.length > 0) {
+        const fileId = result.files[0].id;
+
+        fetch('https://www.googleapis.com/drive/v3/files/' + fileId + '?alt=media&access_token=' + accessToken)
+        .then(response => response.json())
+        .then(data => {
+          books = data || [];
+          renderBooks();
         });
-    }
-
-    // Event listeners for buttons
-    addButton.onclick = addBook;
-
-    // Initial render of the bookshelf
-    renderBookshelf();
-});
+      }
+    });
+  });
+}
