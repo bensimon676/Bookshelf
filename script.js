@@ -5,8 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const addButton = document.getElementById("addButton");
 
     let books = JSON.parse(localStorage.getItem("books")) || [];
-
-    const MAX_BOOKS_PER_SHELF = 5;
+    const MAX_BOOKS_PER_SHELF = 7;
 
     const renderBookshelf = () => {
         shelves.forEach((shelf) => (shelf.innerHTML = ""));
@@ -18,8 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const bookDiv = document.createElement("div");
             bookDiv.classList.add("book");
             bookDiv.style.backgroundColor = book.color;
-            bookDiv.setAttribute("draggable", "true");
             bookDiv.dataset.index = index;
+            bookDiv.draggable = true;
 
             bookDiv.innerHTML = `
                 <div class="spine"></div>
@@ -29,9 +28,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `;
 
-            bookDiv.addEventListener("dragstart", (e) => dragStart(e, index));
-            bookDiv.addEventListener("dragover", (e) => e.preventDefault());
-            bookDiv.addEventListener("drop", (e) => drop(e, index));
+            // Add drag-and-drop events
+            bookDiv.addEventListener("dragstart", dragStart);
+            bookDiv.addEventListener("dragover", dragOver);
+            bookDiv.addEventListener("drop", drop);
+            bookDiv.addEventListener("dragend", dragEnd);
 
             shelf.appendChild(bookDiv);
         });
@@ -63,17 +64,30 @@ document.addEventListener("DOMContentLoaded", () => {
         return palette[Math.floor(Math.random() * palette.length)];
     };
 
-    const dragStart = (e, index) => {
-        e.dataTransfer.setData("text/plain", index);
+    let draggedIndex = null;
+
+    const dragStart = (e) => {
+        draggedIndex = e.target.dataset.index;
+        e.dataTransfer.effectAllowed = "move";
     };
 
-    const drop = (e, targetIndex) => {
-        const draggedIndex = e.dataTransfer.getData("text/plain");
-        if (draggedIndex !== targetIndex) {
-            const [draggedBook] = books.splice(draggedIndex, 1);
-            books.splice(targetIndex, 0, draggedBook);
-            saveAndRender();
-        }
+    const dragOver = (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+    };
+
+    const drop = (e) => {
+        e.preventDefault();
+        const targetIndex = e.target.closest(".book").dataset.index;
+        if (targetIndex == null || draggedIndex == null) return;
+
+        const [draggedBook] = books.splice(draggedIndex, 1);
+        books.splice(targetIndex, 0, draggedBook);
+        saveAndRender();
+    };
+
+    const dragEnd = () => {
+        draggedIndex = null;
     };
 
     addButton.addEventListener("click", addBook);
