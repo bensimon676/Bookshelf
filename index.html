@@ -4,24 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>My Cozy Bookshelf</title>
+    <title>Cozy Bookshelf</title>
 </head>
 <body>
-    <div class="container">
+    <div class="wrapper">
         <header>
-            <h1>📚 My Cozy Bookshelf</h1>
+            <h1>My Cozy Bookshelf</h1>
         </header>
         <main>
-            <div class="controls">
-                <input type="text" id="titleInput" placeholder="Book Title">
-                <input type="text" id="authorInput" placeholder="Book Author">
-                <button id="addButton">Add Book</button>
+            <div class="form">
+                <input type="text" id="titleInput" placeholder="Enter Book Title">
+                <input type="text" id="authorInput" placeholder="Enter Book Author">
+                <button id="addButton">➕ Add Book</button>
             </div>
-            <div id="bookshelf" class="bookshelf"></div>
+            <section id="bookshelf" class="bookshelf">
+                <p class="placeholder">Your bookshelf is empty. Add some books! 📖</p>
+            </section>
         </main>
-        <footer>
-            <p>Organize your books in style!</p>
-        </footer>
     </div>
     <script src="script.js"></script>
 </body>

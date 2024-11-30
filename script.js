@@ -7,26 +7,28 @@ document.addEventListener("DOMContentLoaded", () => {
     let books = JSON.parse(localStorage.getItem("books")) || [];
 
     const renderBookshelf = () => {
-        bookshelf.innerHTML = "";
+        bookshelf.innerHTML = books.length
+            ? ""
+            : '<p class="placeholder">Your bookshelf is empty. Add some books! 📖</p>';
+
         books.forEach((book, index) => {
-            const bookElement = document.createElement("div");
-            bookElement.classList.add("book");
-            bookElement.style.backgroundColor = book.color;
-            bookElement.innerHTML = `
-                <div class="book-info">
-                    <h3>${book.title}</h3>
+            const bookDiv = document.createElement("div");
+            bookDiv.classList.add("book");
+            bookDiv.style.borderColor = book.color;
+            bookDiv.innerHTML = `
+                <div class="book-content">
+                    <h2>${book.title}</h2>
                     <p>${book.author}</p>
                 </div>
-                <button class="delete-btn" title="Remove Book">✖</button>
+                <button class="delete-btn" title="Remove Book">❌</button>
             `;
 
-            // Attach delete functionality
-            bookElement.querySelector(".delete-btn").addEventListener("click", () => {
+            bookDiv.querySelector(".delete-btn").addEventListener("click", () => {
                 books.splice(index, 1);
                 saveAndRender();
             });
 
-            bookshelf.appendChild(bookElement);
+            bookshelf.appendChild(bookDiv);
         });
     };
 
@@ -38,21 +40,17 @@ document.addEventListener("DOMContentLoaded", () => {
     addButton.addEventListener("click", () => {
         const title = titleInput.value.trim();
         const author = authorInput.value.trim();
-        if (!title || !author) return alert("Please fill out both fields!");
+        if (!title || !author) return alert("Both title and author are required!");
 
-        books.push({
-            title,
-            author,
-            color: generateRandomColor(),
-        });
+        books.push({ title, author, color: getRandomColor() });
         titleInput.value = "";
         authorInput.value = "";
         saveAndRender();
     });
 
-    const generateRandomColor = () => {
-        const colors = ["#FFDAB9", "#FAF0E6", "#FFE4C4", "#F4A460", "#D2B48C"];
-        return colors[Math.floor(Math.random() * colors.length)];
+    const getRandomColor = () => {
+        const palette = ["#FFADAD", "#FFD6A5", "#FDFFB6", "#CAFFBF", "#9BF6FF"];
+        return palette[Math.floor(Math.random() * palette.length)];
     };
 
     renderBookshelf();
