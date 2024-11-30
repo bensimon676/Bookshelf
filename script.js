@@ -14,8 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
         books.forEach((book, index) => {
             const bookDiv = document.createElement("div");
             bookDiv.classList.add("book");
-            bookDiv.style.borderColor = book.color;
+            bookDiv.style.backgroundColor = book.color;
             bookDiv.innerHTML = `
+                <div class="spine"></div>
                 <div class="book-content">
                     <h2>${book.title}</h2>
                     <p>${book.author}</p>
