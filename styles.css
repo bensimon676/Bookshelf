@@ -1,51 +1,138 @@
-/* Make the bookshelf look like an actual bookshelf */
-#bookshelf {
-    display: flex;
-    flex-wrap: wrap;
-    background-color: #f3eac3; /* Bookshelf background */
-    padding: 20px;
-    justify-content: space-around;
-    align-items: flex-start;
-    border: 5px solid #8b5e34; /* Wood-colored frame */
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  .book {
-    width: 70px;
-    height: 180px;
-    margin: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    position: relative;
-    font-family: 'Georgia', serif; /* Inviting font */
-  }
-  
-.book-content p {
-    margin: 5px 0;
-    font-size: 14px;
-    color: white; /* Text color on book cover */
-  }
-  
+/* General Reset */
+body, h1, h3, p {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Georgia', serif;
+}
+
+body {
+  background-color: #f8f4e3;
+  color: #5b4636;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* Layout */
+.container {
+  width: 90%;
+  max-width: 800px;
+  padding: 20px;
+  background-color: #fff8e1;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  color: #8b5e34;
+}
+
+/* Book Controls */
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.controls input {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #d4a374;
+  border-radius: 5px;
+  background-color: #fff8e1;
+  font-size: 1rem;
+  color: #5b4636;
+}
+
+.controls input:focus {
+  outline: none;
+  border-color: #8b5e34;
+}
+
+.controls button {
+  padding: 10px 15px;
+  background-color: #d4a374;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.controls button:hover {
+  background-color: #8b5e34;
+}
+
+/* Bookshelf */
+.bookshelf {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  background-color: #fdf4e3;
+  padding: 20px;
+  border: 2px solid #d4a374;
+  border-radius: 10px;
+  box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.book {
+  width: 80px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.book:hover {
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.book-info h3 {
+  font-size: 1rem;
+  color: #fff;
+}
+
+.book-info p {
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+/* Delete Button */
 .delete-btn {
-    background-color: red;
-    color: white;
-    border-radius: 50%;
-    border: none;
-    width: 25px;
-    height: 25px;
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    font-size: 14px;
-    text-align: center;
-    line-height: 22px; /* Vertically center "X" */
-    cursor: pointer;
-  }
-  
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.delete-btn:hover {
+  color: #d22;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.8rem;
+  color: #8b5e34;
+}
