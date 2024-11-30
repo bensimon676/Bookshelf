@@ -13,13 +13,12 @@ body {
   height: 100vh;
   background: linear-gradient(135deg, #FFFAF0, #FFE4E1);
   color: #4A4A4A;
-  text-align: center;
 }
 
-/* Layout */
+/* Wrapper Layout */
 .wrapper {
   width: 90%;
-  max-width: 600px;
+  max-width: 800px;
   background: #FFFFFF;
   border: 3px solid #FFD6A5;
   border-radius: 20px;
@@ -53,13 +52,7 @@ header h1 {
   border-radius: 10px;
   outline: none;
   background-color: #FFF8E8;
-  color: #4A4A4A;
   text-align: center;
-  transition: border-color 0.3s ease;
-}
-
-.form input:focus {
-  border-color: #FF6B6B;
 }
 
 .form button {
@@ -70,96 +63,70 @@ header h1 {
   background-color: #FF6B6B;
   color: #FFFFFF;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.form button:hover {
-  background-color: #FF3D3D;
-}
-
-/* Bookshelf */
+/* Bookshelf Section */
 .bookshelf {
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 20px;
-  padding: 20px;
-  background-color: #FFF8E8;
-  border: 2px dashed #FFD6A5;
-  border-radius: 15px;
 }
 
-.book {
+.shelf {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #F7E3D0;
+  border: 3px solid #D9BBA9;
+  border-radius: 10px;
+  padding: 10px;
+  height: 160px;
   position: relative;
-  width: 100px;
-  height: 150px;
-  border-radius: 5px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+}
+
+/* Shelf Wood Background */
+.shelf:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+      -45deg,
+      #D9BBA9,
+      #D9BBA9 10px,
+      #EBD9C5 10px,
+      #EBD9C5 20px
+  );
+  z-index: -1;
+}
+
+/* Books */
+.book {
+  width: 100px;
+  height: 140px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: #FFFFFF;
-  padding: 10px;
-  font-family: 'Poppins', sans-serif;
-  background: #FFD6A5;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: white;
+  border-radius: 5px;
+  cursor: grab;
 }
 
-.book:hover {
-  transform: scale(1.1);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-
-.spine {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 15px;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 5px 0 0 5px;
+.book:active {
+  cursor: grabbing;
 }
 
 .book h2 {
-  font-size: 1rem;
+  font-size: 0.9rem;
   margin: 5px 0;
 }
 
 .book p {
-  font-size: 0.9rem;
-}
-
-/* Delete Button */
-.delete-btn {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  color: #FFFFFF;
-  cursor: pointer;
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  transition: color 0.3s ease;
-}
-
-.delete-btn:hover {
-  color: #FF3D3D;
-}
-
-/* Placeholder */
-.placeholder {
-  font-size: 1rem;
-  color: #A0A0A0;
-  text-align: center;
-  grid-column: 1 / -1;
-}
-
-/* Footer */
-footer p {
-  margin-top: 20px;
-  font-size: 0.9rem;
-  color: #FF6B6B;
+  font-size: 0.8rem;
 }

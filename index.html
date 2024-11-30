@@ -9,7 +9,7 @@
 <body>
     <div class="wrapper">
         <header>
-            <h1>Ben's Bookshelf</h1>
+            <h1>📚 My Cozy Bookshelf</h1>
         </header>
         <main>
             <div class="form">
@@ -17,9 +17,11 @@
                 <input type="text" id="authorInput" placeholder="Enter Book Author">
                 <button id="addButton">➕ Add Book</button>
             </div>
-            <section id="bookshelf" class="bookshelf">
-                <p class="placeholder">Your bookshelf is empty. Add some books! 📖</p>
-            </section>
+            <div id="bookshelf" class="bookshelf">
+                <div class="shelf" data-shelf="1"></div>
+                <div class="shelf" data-shelf="2"></div>
+                <div class="shelf" data-shelf="3"></div>
+            </div>
         </main>
     </div>
     <script src="script.js"></script>
